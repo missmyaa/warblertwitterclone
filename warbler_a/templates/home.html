@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container-fluid">
+  <aside class="col-md-4 col-lg-3 col-sm-12" id="home-aside">
+    <div class="card user-card">
+      <div class="image-wrapper">
+        <img src="{{ g.user.header_image_url }}" alt="Header Image" class="card-hero">
+      </div>
+      <div class="user-info">
+        <a href="/users/{{ g.user.id }}" class="card-link">
+          <img src="{{ g.user.image_url }}" alt="{{ g.user.username }}'s profile picture" class="card-image">
+          <p>@{{ g.user.username }}</p>
+        </a>
+        <div class="user-stats">
+          {% set user_links = {
+            'messages': ('Messages', g.user.messages | length),
+            'following': ('Following', g.user.following | length),
+            'followers': ('Followers', g.user.followers | length)
+          } %}
+          <ul class="nav nav-pills">
+            {% for link, (title, count) in user_links.items() %}
+              <li class="stat">
+                <p class="small">{{ title }}</p>
+                <h4><a href="/users/{{ g.user.id }}/{{ link }}">{{ count }}</a></h4>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <section class="col-lg-6 col-md-8 col-sm-12">
+    <ul class="list-group" id="messages">
+      {% for msg in messages %}
+        <li class="list-group-item">
+          <div class="media">
+            <a href="/users/{{ msg.user.id }}" class="mr-3">
+              <img src="{{ msg.user.image_url }}" alt="" class="timeline-image">
+            </a>
+            <div class="media-body">
+              <h5 class="mt-0"><a href="/users/{{ msg.user.id }}">@{{ msg.user.username }}</a></h5>
+              <span class="text-muted">{{ msg.timestamp.strftime('%d %B %Y') }}</span>
+              <p>{{ msg.text }}</p>
+            </div>
+          </div>
+          <form method="POST" action="/messages/{{ msg.id }}/like" class="messages-like">
+            <button class="btn btn-sm {{'btn-primary' if msg.id in likes else 'btn-secondary'}}">
+              <i class="fa fa-thumbs-up"></i>
+            </button>
+          </form>
+        </li>
+      {% endfor %}
+    </ul>
+  </section>
+</div>
+{% endblock %}

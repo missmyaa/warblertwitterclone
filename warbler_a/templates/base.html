@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Responsive design support -->
+  <title>Warbler</title>
+
+  <link rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css"> <!-- Use minified CSS for better performance -->
+  <script src="https://unpkg.com/jquery"></script>
+  <script src="https://unpkg.com/popper.js"></script> <!-- Corrected Popper's URL -->
+  <script src="https://unpkg.com/bootstrap/dist/js/bootstrap.min.js"></script> <!-- Use minified JS for better performance -->
+
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
+  <link rel="stylesheet" href="/static/stylesheets/style.css">
+  <link rel="icon" href="/static/favicon.ico"> <!-- "shortcut icon" is deprecated -->
+</head>
+
+<body class="{% block body_class %}{% endblock %}">
+<nav class="navbar navbar-expand-lg navbar-light bg-light"> <!-- Ensure responsiveness and add light background -->
+  <div class="container-fluid">
+    <a href="/" class="navbar-brand">
+      <img src="/static/images/warbler-logo.png" alt="Warbler logo" height="30"> <!-- Added explicit height for the logo -->
+      Warbler
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button> <!-- Navbar toggler for mobile devices -->
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto"> <!-- Use ml-auto to align items to the right -->
+        {% if request.endpoint != 'None' %}
+        <li class="nav-item">
+          <form class="form-inline" action="/users"> <!-- Bootstrap 4 form-inline class for alignment -->
+            <input name="q" class="form-control mr-sm-2" placeholder="Search Warbler" id="search"> <!-- Bootstrap spacing classes -->
+            <button class="btn btn-outline-success" type="submit"> <!-- Outline button for better styling -->
+              <span class="fa fa-search"></span>
+            </button>
+          </form>
+        </li>
+        {% endif %}
+        {% if not g.user %}
+        <li class="nav-item"><a href="/signup" class="nav-link">Sign up</a></li>
+        <li class="nav-item"><a href="/login" class="nav-link">Log in</a></li>
+        {% else %}
+        <li class="nav-item">
+          <a href="/users/{{ g.user.id }}" class="nav-link">
+            <img src="{{ g.user.image_url }}" alt="{{ g.user.username }}" class="rounded-circle" width="30"> <!-- Rounded image & defined width -->
+          </a>
+        </li>
+        <li class="nav-item"><a href="/messages/new" class="nav-link">New Message</a></li>
+        <li class="nav-item"><a href="/logout" class="nav-link">Log out</a></li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+  {% for category, message in get_flashed_messages(with_categories=True) %}
+  <div class="alert alert-{{ category }}">{{ message }}</div>
+  {% endfor %}
+
+  {% block content %}
+  {% endblock %}
+</div>
+
+</body>
+</html>

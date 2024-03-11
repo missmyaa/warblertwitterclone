@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block body_class %}error-404{% endblock %}
+
+{% block content %}
+<div class="text-center message-404"> <!-- Center alignment for better UX -->
+  <h1 class="display-4">Page Not Found</h1> <!-- More semantic and clear -->
+  <p class="my-4"> <!-- Increase margin for better spacing -->
+    Sorry, the page you're looking for doesn't exist. <br> <!-- Use of <br> for clear separation in the message -->
+    You might have typed the URL incorrectly or the page might have been moved.
+  </p>
+  <p>
+    Feel free to search Warbler or <a href="/" class="font-weight-bold">return to the homepage</a>.
+  </p>
+  <div class="row justify-content-center"> <!-- Use Bootstrap's justify-content-center to center the form -->
+    <div class="col-md-6"> <!-- Adjust column size for better form presentation -->
+      <form class="form-inline justify-content-center" action="/users/search"> <!-- Center the form contents -->
+        <input name="q" type="search" class="form-control mb-2 mr-sm-2" placeholder="Search Warbler"> <!-- Use type="search" for semantic purposes -->
+        <button type="submit" class="btn btn-primary mb-2">Search</button> <!-- Use btn-primary for a more appealing button -->
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
